@@ -27,6 +27,7 @@
     "eslint-plugin-react": "^7.24.0",
     "eslint-plugin-react-hooks": "^4.2.0",
     "file-loader": "^6.2.0",
+    "next-images": "^1.8.1",
     "url-loader": "^4.1.1"
   }
 }

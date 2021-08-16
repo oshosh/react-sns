@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import Prototype from 'prop-types'
 import Link from 'next/link'
 import { Input, Menu, Row, Col } from 'antd'
@@ -8,55 +8,79 @@ import styled, { css } from 'styled-components'
 import logo from '../img/logo.svg';
 import changeLogo from '../img/logo_on.svg';
 
-const GitLogoContainter = styled.div``;
-const GitLogo = styled.a`
-    background-image: url(${props => props.img});
+import UserProfile from '../compontents/UserProfile';
+import LoginForm from '../compontents/LoginForm';
+
+const LogoContainter = styled.div`
+    display: flex;
+`;
+const UrlLogo = styled.a`
     width: 32px;
     height: 32px;
     display: block;
     text-indent: -9999px;
+    ${props =>
+        props.img &&
+        css`
+            background-image: url(${props => props.img});
+        `
+    }
 
     &:hover{
         background-image: url(${changeLogo});
     }
 `
+const SearchInput = styled(Input.Search)`
+    vertical-align: middle;
+`;
+const LinkWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+`;
 
 const AppLayout = ({ children }) => {
+    const [isLoggeIn, setIsLoggIn] = useState(false)
+
     return (
         <>
             <Menu mode="horizontal">
-                <Menu.Item>
+                <Menu.Item key='1'>
                     <Link href='/'><a>노드버드</a></Link>
                 </Menu.Item>
-                <Menu.Item>
+                <Menu.Item key='2'>
                     <Link href='/profile'><a>프로필</a></Link>
                 </Menu.Item>
-                <Menu.Item>
-                    <Input.Search enterButton style={{ verticalAlign: 'middle' }} />
+                <Menu.Item key='3'>
+                    <SearchInput enterButton />
                 </Menu.Item>
-                <Menu.Item>
+                <Menu.Item key='4'>
                     <Link href='/signup'><a>회원가입</a></Link>
                 </Menu.Item>
             </Menu>
+
             <Row gutter={8}>
                 <Col xs={24} md={6}>
-                    왼쪽 메뉴
+                    {
+                        isLoggeIn
+                            ? <UserProfile
+                                setIsLoggedIn={setIsLoggIn}
+                            />
+                            : <LoginForm
+                                setIsLoggedIn={setIsLoggIn}
+                            />
+                    }
                 </Col>
                 <Col xs={24} md={12}>
+                    {/* 프로필 */}
                     {children}
                 </Col>
                 <Col xs={24} md={6}>
-                    <div
-                        className="tagContainer"
-                        style={{
-                            display: "flex",
-                            flexDirection: "column",
-                            alignItems: 'center'
-                        }}>
+                    <LinkWrapper>
                         <a
-                            style={{
-                                marginBottom: '10px'
-                            }}
+                            style={useMemo(() => (
+                                { marginBottom: '10px' }
+                            ), [])}
                             href="https://blog.naver.com/qhanfckwsmsd"
                             target="_blank"
                             rel="noreferrer noopener"
@@ -64,19 +88,17 @@ const AppLayout = ({ children }) => {
                             Made by OSH
                         </a>
 
-                        <GitLogoContainter className='gitLogoContainter'>
-                            <GitLogo
-                                // className='gitLogo'
+                        <LogoContainter className='gitLogoContainter'>
+                            <UrlLogo
                                 img={logo}
                                 href="https://github.com/oshosh"
                                 target="_blank"
                                 rel="noreferrer noopener"
                             >
                                 Github
-                            </GitLogo>
-                        </GitLogoContainter>
-                    </div>
-
+                            </UrlLogo>
+                        </LogoContainter>
+                    </LinkWrapper>
                 </Col>
             </Row>
 
