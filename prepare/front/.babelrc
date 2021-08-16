@@ -1,0 +1,16 @@
+//https://velog.io/@hwang-eunji/Styled-components-nextjs%EC%97%90%EC%84%9C-className-%EC%98%A4%EB%A5%98
+{
+    "presets": ["next/babel"],
+    "plugins": [
+      [
+        "babel-plugin-styled-components",
+        { 
+          "fileName": true, 
+          "displayName": true, 
+          "pure": true,
+          "ssr": true, 
+          "preprocess": false
+         }
+      ]
+    ]
+  }
