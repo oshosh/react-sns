@@ -3,16 +3,19 @@ import Avatar from 'antd/lib/avatar/avatar';
 import React, { useCallback } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
+import { logoutAction } from '../reducers/user';
 
 const UserInfoContainer = styled.div`
     display: flex;
     justify-content: space-between;
 `;
 
-const UserProfile = ({ setIsLoggedIn }) => {
+const UserProfile = () => {
 
+    const dispatch = useDispatch()
     const onLogOut = useCallback(() => {
-        setIsLoggedIn(false)
+        dispatch(logoutAction())
     }, [])
 
     return (

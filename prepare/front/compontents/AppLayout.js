@@ -11,6 +11,8 @@ import changeLogo from '../img/logo_on.svg';
 import UserProfile from '../compontents/UserProfile';
 import LoginForm from '../compontents/LoginForm';
 
+import { useSelector } from 'react-redux'
+
 const LogoContainter = styled.div`
     display: flex;
 `;
@@ -40,7 +42,7 @@ const LinkWrapper = styled.div`
 `;
 
 const AppLayout = ({ children }) => {
-    const [isLoggeIn, setIsLoggIn] = useState(false)
+    const { isLoggedIn } = useSelector(state => state.user);
 
     return (
         <>
@@ -62,13 +64,9 @@ const AppLayout = ({ children }) => {
             <Row gutter={8}>
                 <Col xs={24} md={6}>
                     {
-                        isLoggeIn
-                            ? <UserProfile
-                                setIsLoggedIn={setIsLoggIn}
-                            />
-                            : <LoginForm
-                                setIsLoggedIn={setIsLoggIn}
-                            />
+                        isLoggedIn
+                            ? <UserProfile />
+                            : <LoginForm />
                     }
                 </Col>
                 <Col xs={24} md={12}>
