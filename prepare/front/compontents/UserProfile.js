@@ -2,6 +2,7 @@ import { Button, Card } from 'antd';
 import Avatar from 'antd/lib/avatar/avatar';
 import React, { useCallback } from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 const UserInfoContainer = styled.div`
     display: flex;
@@ -37,5 +38,10 @@ const UserProfile = ({ setIsLoggedIn }) => {
         </Card>
     );
 }
+UserProfile.propTypes = {
+    setIsLoggedIn: PropTypes.func.isRequired,
+}
 
 export default UserProfile;
+
+
