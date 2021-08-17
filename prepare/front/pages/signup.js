@@ -4,6 +4,7 @@ import AppLayout from '../compontents/AppLayout';
 import { Form, Input, Checkbox, Button } from 'antd';
 import useInput from '../hooks/useInput';
 import styled from 'styled-components';
+import { IsNullOrEmpty } from '../commfunction/util';
 
 const ErrorMessage = styled.div`
     color: red;
@@ -12,16 +13,6 @@ const SucessMessage = styled.div`
     color: blue;
 `;
 
-function IsNullOrEmpty(str) {
-    let isEmpty = false
-    if (str === undefined || str === "" || str === Infinity || str === null || str === "null" || str === "undefined") {
-        isEmpty = true
-    } else if (typeof str === "string" && str.trim() === "") {
-        isEmpty = true
-    }
-
-    return isEmpty
-}
 
 const Signup = () => {
 

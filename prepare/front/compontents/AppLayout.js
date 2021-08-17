@@ -55,7 +55,7 @@ const AppLayout = ({ children }) => {
                     <SearchInput enterButton />
                 </Menu.Item>
                 <Menu.Item key='4'>
-                    <Link href='/signup'><a>회원가입</a></Link>
+                    {/* <Link href='/signup'><a>회원가입</a></Link> */}
                 </Menu.Item>
             </Menu>
 
