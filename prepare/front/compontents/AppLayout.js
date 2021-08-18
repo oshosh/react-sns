@@ -3,7 +3,7 @@ import Prototype from 'prop-types'
 import Link from 'next/link'
 import { Input, Menu, Row, Col } from 'antd'
 import 'antd/dist/antd.css'
-import styled, { css } from 'styled-components'
+import styled, { createGlobalStyle, css } from 'styled-components'
 
 import logo from '../img/logo.svg';
 import changeLogo from '../img/logo_on.svg';
@@ -12,6 +12,20 @@ import UserProfile from '../compontents/UserProfile';
 import LoginForm from '../compontents/LoginForm';
 
 import { useSelector } from 'react-redux'
+
+const Global = createGlobalStyle`
+    .ant-row {
+        margin-right: 0 !important;
+        margin-left: 0 !important;
+    }
+
+    .ant-col:first-child {
+        padding-left: 0 !important;
+    }
+    .ant-col:last-child{
+        padding-right: 0 !important;
+    }
+`
 
 const LogoContainter = styled.div`
     display: flex;
@@ -46,6 +60,7 @@ const AppLayout = ({ children }) => {
 
     return (
         <>
+            <Global />
             <Menu mode="horizontal">
                 <Menu.Item key='1'>
                     <Link href='/'><a>노드버드</a></Link>
