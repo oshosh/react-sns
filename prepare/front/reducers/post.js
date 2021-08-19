@@ -1,4 +1,20 @@
+import shortId from 'shortid'
 
+export const LOAD_POSTS_REQUEST = 'LOAD_POSTS_REQUEST';
+export const LOAD_POSTS_SUCCESS = 'LOAD_POSTS_SUCCESS';
+export const LOAD_POSTS_FAILURE = 'LOAD_POSTS_FAILURE';
+
+export const ADD_POST_REQUEST = 'ADD_POST_REQUEST';
+export const ADD_POST_SUCCESS = 'ADD_POST_SUCCESS';
+export const ADD_POST_FAILURE = 'ADD_POST_FAILURE';
+
+export const REMOVE_POST_REQUEST = 'REMOVE_POST_REQUEST';
+export const REMOVE_POST_SUCCESS = 'REMOVE_POST_SUCCESS';
+export const REMOVE_POST_FAILURE = 'REMOVE_POST_FAILURE';
+
+export const ADD_COMMENT_REQUEST = 'ADD_COMMENT_REQUEST';
+export const ADD_COMMENT_SUCCESS = 'ADD_COMMENT_SUCCESS';
+export const ADD_COMMENT_FAILURE = 'ADD_COMMENT_FAILURE';
 
 export const initialState = {
     // db 시퀄라이즈는 대문자로
@@ -6,7 +22,7 @@ export const initialState = {
         id: 1,
         User: {
             id: 1,
-            nickname: '제로초',
+            nickname: 'osh',
         },
         content: '첫 번째 게시글 #해시태그 #익스프레스',
         Images: [
@@ -33,35 +49,106 @@ export const initialState = {
         }]
     }],
     imagePaths: [],
-    postAdded: false,
+
+    addPostLoading: false,
+    addPostDone: false,
+    addPostError: null,
+
+    addCommentLoading: false,
+    addCommentDone: false,
+    addCommentError: null,
 }
 
-const ADD_POST = 'ADD_POST'
+export const addPost = (data) => ({
+    type: ADD_POST_REQUEST,
+    data
+})
 
-export const addPost = {
-    type: ADD_POST,
-}
+export const addComment = (data) => ({
+    type: ADD_COMMENT_REQUEST,
+    data,
+});
 
-export const dummyPost = {
-    id: 2,
-    content: '더미데이터입니다.',
+const dummyPost = (data) => ({
+    // npm i shortid
+    // npm i faker
+    id: shortId.generate(),
+    content: data,
     User: {
         id: 1,
-        nickname: '제로초',
+        nickname: 'osh',
     },
     Images: [],
     Comments: [],
-}
+})
+
+const dummyComment = (data) => ({
+    id: shortId.generate(),
+    content: data,
+    User: {
+        id: 1,
+        nickname: 'osh',
+    },
+})
 
 export default (state = initialState, action) => {
     switch (action.type) {
-        case ADD_POST:
+        case ADD_POST_REQUEST:
             return {
                 ...state,
-                mainPosts: [dummyPost, ...state.mainPosts],
-                postAdded: true
+                addPostLoading: true,
+                addPostDone: false,
+                addPostError: null,
+            }
+        case ADD_POST_SUCCESS:
+            return {
+                ...state,
+                mainPosts: [dummyPost(action.data), ...state.mainPosts],
+                addPostLoading: false,
+                addPostDone: true,
+            }
+        case ADD_POST_FAILURE:
+            return {
+                ...state,
+                addPostLoading: false,
+                addPostError: action.error,
+            }
+
+        case ADD_COMMENT_REQUEST:
+            return {
+                ...state,
+                addCommentLoading: true,
+                addCommentDone: false,
+                addCommentError: null,
+            }
+        case ADD_COMMENT_SUCCESS:
+            const postIndex = state.mainPosts.findIndex((v) => v.id === action.data.postId)
+
+            const post = { ...state.mainPosts[postIndex] }
+            post.Comments = [dummyComment(action.data.content), ...post.Comments]
+
+            const mainPosts = [...state.mainPosts]
+            mainPosts[postIndex] = post
+
+            return {
+                ...state,
+                mainPosts,
+                addCommentLoading: false,
+                addCommentDone: true,
+            }
+        case ADD_COMMENT_FAILURE:
+            return {
+                ...state,
+                addCommentLoading: false,
+                addCommentError: action.error,
             }
         default:
             return state;
     }
+}
+const asd = {
+    User: {
+        nickname: 'osssh'
+    },
+    content: 'testuser입니다'
 }

@@ -5,6 +5,8 @@ import { Form, Input, Checkbox, Button } from 'antd';
 import useInput from '../hooks/useInput';
 import styled from 'styled-components';
 import { IsNullOrEmpty } from '../commfunction/util';
+import { SIGN_UP_REQUEST } from '../reducers/user';
+import { useDispatch, useSelector } from 'react-redux';
 
 const ErrorMessage = styled.div`
     color: red;
@@ -15,6 +17,8 @@ const SucessMessage = styled.div`
 
 
 const Signup = () => {
+    const dispatch = useDispatch()
+    const { signUpLoading } = useSelector((state) => state.user)
 
     const pwdCheckRef = useRef()
 
@@ -24,7 +28,7 @@ const Signup = () => {
     const [term, setTerm] = useState(false);
     const [termError, setTermError] = useState(false);
 
-    const [id, onChangeId] = useInput('')
+    const [email, onChangeEamil] = useInput('')
     const [nickname, onChangeNickname] = useInput('')
     const [password, onChangePassword] = useInput('', pwdCheckRef)
 
@@ -40,9 +44,12 @@ const Signup = () => {
         }
 
         // 전부다 체크가 되었을때만..
-        console.log(id, nickname, password)
-
-    }, [password, passwordCheck, term])
+        console.log(email, nickname, password)
+        dispatch({
+            type: SIGN_UP_REQUEST,
+            data: { email, password, nickname }
+        })
+    }, [email, password, passwordCheck, term])
 
     const onChangePasswordCheck = useCallback((e) => {
         if (password === undefined || passwordCheck === null) {
@@ -87,9 +94,9 @@ const Signup = () => {
             </Head>
             <Form onFinish={onsubmit} >
                 <div>
-                    <label htmlFor='user-id'>아이디</label>
+                    <label htmlFor='user-email'>이메일</label>
                     <br />
-                    <Input name='user-id' value={id} required onChange={onChangeId} />
+                    <Input name='user-email' type="email" value={email} required onChange={onChangeEamil} />
                 </div>
                 <div>
                     <label htmlFor='user-nick'>닉네임</label>
@@ -127,7 +134,7 @@ const Signup = () => {
                     {termError && <ErrorMessage>약관에 동의하셔야 합니다.</ErrorMessage>}
                 </div>
                 <div style={{ marginTop: 10 }}>
-                    <Button disabled={disableCheck} type="primary" htmlType="submit">가입하기</Button>
+                    <Button disabled={disableCheck} type="primary" htmlType="submit" loading={signUpLoading}>가입하기</Button>
                 </div>
             </Form>
         </AppLayout>
