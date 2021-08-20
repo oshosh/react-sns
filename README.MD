@@ -16,3 +16,7 @@
 
 ### 3일차
  - saga 적용(댓글, 게시판글, 로그인, 로그아웃), 해시태그 적용, slick silder 적용
+
+### 4일차
+ - front 마무리 작업 (언팔로우, 팔로우, 닉네임 수정 추가, infinite scroll)
+ - 시간되면...  react-virtualized 확인후 infinite scroll 최적화 
