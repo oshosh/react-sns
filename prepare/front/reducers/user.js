@@ -29,6 +29,14 @@ export const REMOVE_POST_OF_ME = 'REMOVE_POST_OF_ME';
 
 //초기값
 export const initialState = {
+    followLoading: false, // 팔로우 시도중
+    followDone: false,
+    followError: null,
+
+    unfollowLoading: false, // 언팔로우 시도중
+    unfollowDone: false,
+    unfollowError: null,
+
     logInLoading: false, // 로그인 시도중
     logInDone: false,
     logInError: null,
@@ -37,10 +45,16 @@ export const initialState = {
     logOutDone: false,
     logOutError: null,
 
-    signUpLoading: false, // 로그아웃 시도중
+    signUpLoading: false, // 회원가입 시도중
     signUpDone: false,
     signUpError: null,
+
+    changeNicknameLoading: false, // 닉네임 변경 시도중
+    changeNicknameDone: false,
+    changeNicknameError: null,
+
     me: null,
+
     signUpData: {},
     loginData: {},
 }
@@ -73,21 +87,42 @@ const dummyUser = (data) => ({
 export default (state = initialState, action) => {
     return produce(state, (draft) => {
         switch (action.type) {
+
+            case CHANGE_NICKNAME_REQUEST:
+                draft.changeNicknameLoading = true;
+                draft.changeNicknameError = null;
+                draft.changeNicknameDone = false;
+                break;
+            case CHANGE_NICKNAME_SUCCESS:
+                if (draft.me.nickname !== action.data) {
+                    draft.me.nickname = action.data
+                    alert('성공')
+                } else {
+                    alert('닉네임 같음')
+                }
+                draft.changeNicknameLoading = false;
+                draft.changeNicknameDone = true;
+
+
+                break;
+            case CHANGE_NICKNAME_FAILURE:
+                draft.changeNicknameLoading = false;
+                draft.changeNicknameError = action.error;
+                break;
+
             case LOG_IN_REQUEST:
-                console.log('reducer logIn')
-                draft.logInLoading = true;
-                draft.logInError = null;
-                draft.logInDone = false;
+                draft.changeNicknameLoading = true;
+                draft.changeNicknameError = null;
+                draft.changeNicknameDone = false;
                 break;
             case LOG_IN_SUCCESS:
-                console.log('reducer LOG_IN_SUCCESS')
-                draft.logInLoading = false;
+                draft.changeNicknameLoading = false;
                 draft.me = dummyUser(action.data);
-                draft.logInDone = true;
+                draft.changeNicknameDone = true;
                 break;
             case LOG_IN_FAILURE:
-                draft.logInLoading = false;
-                draft.logInError = action.error;
+                draft.changeNicknameLoading = false;
+                draft.changeNicknameError = action.error;
                 break;
 
 
@@ -122,19 +157,33 @@ export default (state = initialState, action) => {
                 break;
 
 
-
-            case CHANGE_NICKNAME_REQUEST:
-                draft.changeNicknameLoading = true;
-                draft.changeNicknameError = null;
-                draft.changeNicknameDone = false;
+            case FOLLOW_REQUEST:
+                draft.followLoading = true;
+                draft.followError = null;
+                draft.followDone = false;
                 break;
-            case CHANGE_NICKNAME_SUCCESS:
-                draft.changeNicknameLoading = false;
-                draft.changeNicknameDone = true;
+            case FOLLOW_SUCCESS:
+                draft.followLoading = false;
+                draft.me.Followings.push({ id: action.data });
+                draft.followDone = true;
                 break;
-            case CHANGE_NICKNAME_FAILURE:
-                draft.changeNicknameLoading = false;
-                draft.changeNicknameError = action.error;
+            case FOLLOW_FAILURE:
+                draft.followLoading = false;
+                draft.followError = action.error;
+                break;
+            case UNFOLLOW_REQUEST:
+                draft.unfollowLoading = true;
+                draft.unfollowError = null;
+                draft.unfollowDone = false;
+                break;
+            case UNFOLLOW_SUCCESS:
+                draft.unfollowLoading = false;
+                draft.me.Followings = draft.me.Followings.filter((v) => v.id !== action.data);
+                draft.unfollowDone = true;
+                break;
+            case UNFOLLOW_FAILURE:
+                draft.unfollowLoading = false;
+                draft.unfollowError = action.error;
                 break;
 
 
