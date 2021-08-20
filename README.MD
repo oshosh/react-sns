@@ -20,3 +20,6 @@
 ### 4일차
  - front 마무리 작업 (언팔로우, 팔로우, 닉네임 수정 추가, infinite scroll)
  - 시간되면...  react-virtualized 확인후 infinite scroll 최적화 
+ - 불변성 관리 immer 추가
+ - 가짜 데이터 faker data 추가
+ -  - id generator npm 추가
