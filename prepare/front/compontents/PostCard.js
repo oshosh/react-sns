@@ -2,13 +2,16 @@ import { EllipsisOutlined, HeartOutlined, HeartTwoTone, MessageOutlined, Retweet
 import { Button, Card, Popover, List, Comment } from 'antd';
 import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types'
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import Avatar from 'antd/lib/avatar/avatar';
 import PostImages from './PostImages';
 import CommentForm from './CommentForm';
 import PostCardContent from './PostCardContent';
+import { REMOVE_POST_REQUEST } from '../reducers/post';
 
 function PostCard({ post }) {
+    const { removePostLoading } = useSelector((state) => state.post);
+    const dispatch = useDispatch()
     const [liked, setLiked] = useState(false);
     const [commentFormOpened, setCommentFormOpened] = useState(false);
 
@@ -22,6 +25,12 @@ function PostCard({ post }) {
         setCommentFormOpened((prev) => !prev);
     }, [commentFormOpened])
 
+    const onRemovePost = useCallback(() => {
+        dispatch({
+            type: REMOVE_POST_REQUEST,
+            data: post.id,
+        })
+    }, [])
     return (
         <div style={{ marginBottom: '20px' }} >
             <Card
@@ -38,7 +47,7 @@ function PostCard({ post }) {
                                 ? (
                                     <>
                                         <Button>수정</Button>
-                                        <Button type='danger'>삭제</Button>
+                                        <Button loading={removePostLoading} onClick={onRemovePost} type='danger'>삭제</Button>
                                     </>
                                 )
                                 : <Button>신고</Button>
