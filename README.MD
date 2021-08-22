@@ -3,23 +3,40 @@
 ## 개발 일지
 
 ### 1일차
- - styled components class name 변경되어 style이 적용 안되는 증상
-  
-  = 적용하고자하는 프로젝트 루트에 babel 적용
- - next svg 파일 미적용 현상
-  
-  = webpack 적용 (프로젝트 전체)
-  
+
+- styled components class name 변경되어 style이 적용 안되는 증상
+
+= 적용하고자하는 프로젝트 루트에 babel 적용
+
+- next svg 파일 미적용 현상
+
+= webpack 적용 (프로젝트 전체)
+
 ### 2일차
- - 회원가입 기능 검사 로직 고도화, 가입하기 버튼 disable 기능추가
- - next + redux 적용 및 redux 구조분해 적용 (계속 추가 예정)
+
+- 회원가입 기능 검사 로직 고도화, 가입하기 버튼 disable 기능추가
+- next + redux 적용 및 redux 구조분해 적용 (계속 추가 예정)
 
 ### 3일차
- - saga 적용(댓글, 게시판글, 로그인, 로그아웃), 해시태그 적용, slick silder 적용
+
+- saga 적용(댓글, 게시판글, 로그인, 로그아웃), 해시태그 적용, slick silder 적용
 
 ### 4일차
- - front 마무리 작업 (언팔로우, 팔로우, 닉네임 수정 추가, infinite scroll)
- - 시간되면...  react-virtualized 확인후 infinite scroll 최적화 
- - 불변성 관리 immer 추가
- - 가짜 데이터 faker data 추가
- - id generator npm 추가
+
+- front 마무리 작업 (언팔로우, 팔로우, 닉네임 수정 추가, infinite scroll)
+- 시간되면... react-virtualized 확인후 infinite scroll 최적화
+- 불변성 관리 immer 추가
+- 가짜 데이터 faker data 추가
+- id generator npm 추가
+
+### 5일차
+
+- node 라우터 설정
+- MySQL 도입, 테이블 create, 관계형 테이블 생성
+- MySQL Workbench 도입
+- 로그인 로그아웃 정책 (node passport, cookie parser)
+- 비밀번호 암호화 (bcrypt)
+- config 관리 (dotenv)
+- gitignore 변경
+- 회원가입 후 회원가입 버튼 누를때 버그 수정
+- db로 부터 잘못된 정보 에러 반환 오류 처리 수정
