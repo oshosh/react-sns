@@ -1,9 +1,10 @@
 # REACT + NEXT
  - Framework
- 
+ ```
     Database : MySQL
     Front-end: Antd, React-hooks, next JS, Redux-saga
     Back-end : node JS, node Sequelize
+```
 
 ## 개발 일지
 
