@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
     // db.UserInfo.belongsTo(db.User)
     Post.associate = (db) => {
         db.Post.belongsTo(db.User) // 1: 다
-        db.Post.belongsToMany(db.Hashtag) // 다 : 다
+        db.Post.belongsToMany(db.Hashtag, { through: 'PostHashtag' }) // 다 : 다
         db.Post.hasMany(db.Comment)
         db.Post.hasMany(db.Image) // 1: 다
         db.Post.belongsToMany(db.User, { through: 'Like', as: 'Likers' })

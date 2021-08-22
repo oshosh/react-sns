@@ -1,4 +1,5 @@
 import { all, fork } from "@redux-saga/core/effects";
+import axios from "axios";
 // fork - 비동기로 함수 실행 (non-block)
 // all - 배열 내 action 전부 실행
 // take - action이 실행 될 떄 까지 대기
@@ -8,6 +9,8 @@ import { all, fork } from "@redux-saga/core/effects";
 
 import postSaga from "./post";
 import userSaga from "./user";
+
+axios.defaults.baseURL = 'http://localhost:3065/'
 
 export default function* rootSaga() {
     yield all([

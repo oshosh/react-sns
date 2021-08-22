@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import { IsNullOrEmpty } from '../commfunction/util';
 import { SIGN_UP_REQUEST } from '../reducers/user';
 import { useDispatch, useSelector } from 'react-redux';
+import Router from 'next/router'
 
 const ErrorMessage = styled.div`
     color: red;
@@ -18,7 +19,31 @@ const SucessMessage = styled.div`
 
 const Signup = () => {
     const dispatch = useDispatch()
-    const { signUpLoading } = useSelector((state) => state.user)
+    const { signUpLoading, signUpDone, signUpError, me } = useSelector((state) => state.user)
+
+    useEffect(() => {
+        if (me && me.id) {
+            Router.replace('/');
+        }
+    }, [me && me.id])
+
+    useEffect(() => {
+        // 회원가입 성공시
+        if (signUpDone) {
+            Router.replace('/')
+
+            dispatch({
+                type: 'SIGN_UP_DONE_SUCCESS_INIT'
+            })
+        }
+    }, [signUpDone])
+
+    useEffect(() => {
+        // 회원가입 실패시
+        if (signUpError) {
+            alert(signUpError);
+        }
+    }, [signUpError])
 
     const pwdCheckRef = useRef()
 

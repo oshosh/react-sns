@@ -75,6 +75,12 @@ export const logoutRequestAction = (data) => {
     }
 }
 
+export const signUpDoneSuccessInit = () => {
+    return {
+        type: 'SIGN_UP_DONE_SUCCESS_INIT'
+    }
+}
+
 const dummyUser = (data) => ({
     ...data,
     nickname: 'osh',
@@ -87,6 +93,10 @@ const dummyUser = (data) => ({
 export default (state = initialState, action) => {
     return produce(state, (draft) => {
         switch (action.type) {
+            // 회원 가입 후 done 초기화
+            case 'SIGN_UP_DONE_SUCCESS_INIT':
+                draft.signUpDone = false
+                break;
 
             case CHANGE_NICKNAME_REQUEST:
                 draft.changeNicknameLoading = true;
@@ -111,18 +121,18 @@ export default (state = initialState, action) => {
                 break;
 
             case LOG_IN_REQUEST:
-                draft.changeNicknameLoading = true;
-                draft.changeNicknameError = null;
-                draft.changeNicknameDone = false;
+                draft.logInLoading = true;
+                draft.logInError = null;
+                draft.logInDone = false;
                 break;
             case LOG_IN_SUCCESS:
-                draft.changeNicknameLoading = false;
-                draft.me = dummyUser(action.data);
-                draft.changeNicknameDone = true;
+                draft.logInLoading = false;
+                draft.me = action.data;//dummyUser(action.data);
+                draft.logInDone = true;
                 break;
             case LOG_IN_FAILURE:
-                draft.changeNicknameLoading = false;
-                draft.changeNicknameError = action.error;
+                draft.logInLoading = false;
+                draft.logInError = action.error;
                 break;
 
 
