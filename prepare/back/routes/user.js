@@ -2,11 +2,42 @@ const express = require('express');
 const bcrypt = require('bcrypt') // npm i bcrypt
 const passport = require('passport');
 const { User, Post } = require('../models');
-
+const { isLoggedIn, isNotLoggedIn } = require('./middleware')
 const router = express.Router();
 
+router.get('/', async (req, res, next) => { // GET /user
+    try {
+        if (req.user) {
+            const fullUserWithoutPassword = await User.findOne({
+                where: { id: req.user.id },
+                attributes: {
+                    exclude: ['password']
+                },
+                include: [{
+                    model: Post,
+                    attributes: ['id'],
+                }, {
+                    model: User,
+                    as: 'Followings',
+                    attributes: ['id'],
+                }, {
+                    model: User,
+                    as: 'Followers',
+                    attributes: ['id'],
+                }]
+            })
+            res.status(200).json(fullUserWithoutPassword);
+        } else {
+            res.status(200).json(null);
+        }
+    } catch (error) {
+        console.error(error)
+        next(error)
+    }
 
-router.post('/login', (req, res, next) => {
+})
+
+router.post('/login', isNotLoggedIn, (req, res, next) => {
     passport.authenticate('local', (err, user, info) => {
         if (err) {
             // 서버 에러
@@ -45,10 +76,11 @@ router.post('/login', (req, res, next) => {
     })(req, res, next); // 미들웨어 확장
 });
 
-router.post('/user/logout', (req, res, next) => {
+router.post('/logout', isLoggedIn, (req, res, next) => {
+    console.log('logout 라우터')
     req.logout();
-    req.session.destroy()
-    res.status(200).send('ok');
+    req.session.destroy();
+    res.send('ok');
 })
 
 router.post('/', async (req, res, next) => { // POST /user/

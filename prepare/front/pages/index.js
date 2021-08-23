@@ -4,14 +4,17 @@ import AppLayout from '../compontents/AppLayout';
 import PostCard from '../compontents/PostCard';
 import PostForm from '../compontents/PostForm';
 import { LOAD_POSTS_REQUEST } from '../reducers/post';
-import { InfiniteLoader, List } from 'react-virtualized';
+import { LOAD_MY_INFO_REQUEST } from '../reducers/user';
 
 const HOME = () => {
+    const dispatch = useDispatch()
     const { me } = useSelector((state) => state.user);
     const { mainPosts, hasMorePosts, loadPostsLoading } = useSelector((state) => state.post)
 
-    const dispatch = useDispatch()
     useEffect(() => {
+        dispatch({
+            type: LOAD_MY_INFO_REQUEST
+        })
         dispatch({
             type: LOAD_POSTS_REQUEST
         })
