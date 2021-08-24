@@ -46,3 +46,10 @@
 - gitignore 변경
 - 회원가입 후 회원가입 버튼 누를때 버그 수정
 - db로 부터 잘못된 정보 에러 반환 오류 처리 수정
+
+
+### 6일차
+ - credentials 쿠키 공유
+ - 라우터 인증여부 isAutenticated 미들웨어 추가
+ - 로그인 풀리는 현상 수정 
+ - 전체적인 정리 (https://blog.naver.com/qhanfckwsmsd/222481257808)
