@@ -3,6 +3,14 @@ import { produce } from 'immer'
 import shortid from 'shortid';
 import faker from 'faker'
 
+export const LIKE_POST_REQUEST = 'LIKE_POST_REQUEST';
+export const LIKE_POST_SUCCESS = 'LIKE_POST_SUCCESS';
+export const LIKE_POST_FAILURE = 'LIKE_POST_FAILURE';
+
+export const UNLIKE_POST_REQUEST = 'UNLIKE_POST_REQUEST';
+export const UNLIKE_POST_SUCCESS = 'UNLIKE_POST_SUCCESS';
+export const UNLIKE_POST_FAILURE = 'UNLIKE_POST_FAILURE';
+
 export const LOAD_POSTS_REQUEST = 'LOAD_POSTS_REQUEST';
 export const LOAD_POSTS_SUCCESS = 'LOAD_POSTS_SUCCESS';
 export const LOAD_POSTS_FAILURE = 'LOAD_POSTS_FAILURE';
@@ -21,42 +29,43 @@ export const ADD_COMMENT_FAILURE = 'ADD_COMMENT_FAILURE';
 
 export const initialState = {
     // db 시퀄라이즈는 대문자로
-    mainPosts: [{
-        id: 1,
-        User: {
-            id: 1,
-            nickname: 'osh',
-        },
-        content: '첫 번째 게시글 #해시태그 #익스프레스',
-        Images: [
-            {
-                id: shortId.generate(),
-                src: 'https://bookthumb-phinf.pstatic.net/cover/137/995/13799585.jpg?udate=20180726',
-            },
-            {
-                id: shortId.generate(),
-                src: 'https://gimg.gilbut.co.kr/book/BN001958/rn_view_BN001958.jpg',
-            },
-            {
-                id: shortId.generate(),
-                src: 'https://gimg.gilbut.co.kr/book/BN001998/rn_view_BN001998.jpg',
-            }
-        ],
-        Comments: [{
-            id: shortId.generate(),
-            User: {
-                id: shortId.generate(),
-                nickname: 'nero',
-            },
-            content: '우와 개정판이 나왔군요~',
-        }, {
-            User: {
-                id: shortId.generate(),
-                nickname: 'hero',
-            },
-            content: '얼른 사고싶어요~',
-        }]
-    }],
+    // mainPosts: [{
+    //     id: 1,
+    //     User: {
+    //         id: 1,
+    //         nickname: 'osh',
+    //     },
+    //     content: '첫 번째 게시글 #해시태그 #익스프레스',
+    //     Images: [
+    //         {
+    //             id: shortId.generate(),
+    //             src: 'https://bookthumb-phinf.pstatic.net/cover/137/995/13799585.jpg?udate=20180726',
+    //         },
+    //         {
+    //             id: shortId.generate(),
+    //             src: 'https://gimg.gilbut.co.kr/book/BN001958/rn_view_BN001958.jpg',
+    //         },
+    //         {
+    //             id: shortId.generate(),
+    //             src: 'https://gimg.gilbut.co.kr/book/BN001998/rn_view_BN001998.jpg',
+    //         }
+    //     ],
+    //     Comments: [{
+    //         id: shortId.generate(),
+    //         User: {
+    //             id: shortId.generate(),
+    //             nickname: 'nero',
+    //         },
+    //         content: '우와 개정판이 나왔군요~',
+    //     }, {
+    //         User: {
+    //             id: shortId.generate(),
+    //             nickname: 'hero',
+    //         },
+    //         content: '얼른 사고싶어요~',
+    //     }]
+    // }],
+    mainPosts: [],
     imagePaths: [],
 
     addPostLoading: false,
@@ -76,6 +85,14 @@ export const initialState = {
     loadPostsLoading: false,
     loadPostsDone: false,
     loadPostsError: null,
+
+    // 좋아요
+    likePostLoading: false,
+    likePostDone: false,
+    likePostError: null,
+    unlikePostLoading: false,
+    unlikePostDone: false,
+    unlikePostError: null,
 }
 const randomArr = [1, 2, 3, 4, 5, 6,]
 
@@ -106,12 +123,10 @@ export const generaterDummyPost = (number) => Array(number).fill().map(() => ({
 // initialState.mainPosts = initialState.mainPosts.concat(generaterDummyPost(10));
 
 
-export const addPost = (data) => {
-    return {
-        type: ADD_POST_REQUEST,
-        data
-    }
-}
+export const addPost = (data) => ({
+    type: ADD_POST_REQUEST,
+    data
+})
 
 export const addComment = (data) => ({
     type: ADD_COMMENT_REQUEST,
@@ -151,9 +166,10 @@ export default (state = initialState, action) => {
                 break;
             case ADD_POST_SUCCESS:
                 // draft.mainPosts.unshift(dummyPost(action.data))
-                draft.mainPosts.unshift(action.data)
                 draft.addPostLoading = false
                 draft.addPostDone = true
+                draft.mainPosts.unshift(action.data)
+                draft.imagePaths = [];
                 break;
             case ADD_POST_FAILURE:
                 draft.PostLoading = false
@@ -221,6 +237,40 @@ export default (state = initialState, action) => {
             case LOAD_POSTS_FAILURE:
                 draft.loadPostsLoading = false;
                 draft.loadPostsError = action.error;
+                break;
+
+            // 좋아요
+            case LIKE_POST_REQUEST:
+                draft.likePostLoading = true;
+                draft.likePostDone = false;
+                draft.likePostError = null;
+                break;
+            case LIKE_POST_SUCCESS: {
+                const post = draft.mainPosts.find((v) => v.id === action.data.PostId);
+                post.Likers.push({ id: action.data.UserId });
+                draft.likePostLoading = false;
+                draft.likePostDone = true;
+                break;
+            }
+            case LIKE_POST_FAILURE:
+                draft.likePostLoading = false;
+                draft.likePostError = action.error;
+                break;
+            case UNLIKE_POST_REQUEST:
+                draft.unlikePostLoading = true;
+                draft.unlikePostDone = false;
+                draft.unlikePostError = null;
+                break;
+            case UNLIKE_POST_SUCCESS: {
+                const post = draft.mainPosts.find((v) => v.id === action.data.PostId);
+                post.Likers = post.Likers.filter((v) => v.id !== action.data.UserId);
+                draft.unlikePostLoading = false;
+                draft.unlikePostDone = true;
+                break;
+            }
+            case UNLIKE_POST_FAILURE:
+                draft.unlikePostLoading = false;
+                draft.unlikePostError = action.error;
                 break;
             default:
                 break

@@ -13,47 +13,6 @@ import LoginForm from '../compontents/LoginForm';
 
 import { useSelector } from 'react-redux'
 
-const Global = createGlobalStyle`
-    .ant-row {
-        margin-right: 0 !important;
-        margin-left: 0 !important;
-    }
-
-    .ant-col:first-child {
-        padding-left: 0 !important;
-    }
-    .ant-col:last-child{
-        padding-right: 0 !important;
-    }
-`
-
-const LogoContainter = styled.div`
-    display: flex;
-`;
-const UrlLogo = styled.a`
-    width: 32px;
-    height: 32px;
-    display: block;
-    text-indent: -9999px;
-    ${props =>
-        props.img &&
-        css`
-            background-image: url(${props => props.img});
-        `
-    }
-
-    &:hover{
-        background-image: url(${changeLogo});
-    }
-`
-const SearchInput = styled(Input.Search)`
-    vertical-align: middle;
-`;
-const LinkWrapper = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-`;
 
 const AppLayout = ({ children }) => {
     const { me } = useSelector(state => state.user);
@@ -123,3 +82,45 @@ export default AppLayout;
 AppLayout.Prototype = {
     children: Prototype.node.isRequired,
 }
+
+const Global = createGlobalStyle`
+    .ant-row {
+        margin-right: 0 !important;
+        margin-left: 0 !important;
+    }
+
+    .ant-col:first-child {
+        padding-left: 0 !important;
+    }
+    .ant-col:last-child{
+        padding-right: 0 !important;
+    }
+`
+
+const LogoContainter = styled.div`
+    display: flex;
+`;
+const UrlLogo = styled.a`
+    width: 32px;
+    height: 32px;
+    display: block;
+    text-indent: -9999px;
+    ${props =>
+        props.img &&
+        css`
+            background-image: url(${props => props.img});
+        `
+    }
+
+    &:hover{
+        background-image: url(${changeLogo});
+    }
+`
+const SearchInput = styled(Input.Search)`
+    vertical-align: middle;
+`;
+const LinkWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+`;

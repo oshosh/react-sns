@@ -46,7 +46,10 @@ const HOME = () => {
 
     return (
         <AppLayout>
+            {/* 게시글 작성 */}
             {me && <PostForm />}
+
+            {/* 게시글 목록 */}
             {mainPosts.map((post) => <PostCard key={post.id} post={post} />)}
             {/* <InfiniteLoader
                 isRowLoaded={isRowLoaded}

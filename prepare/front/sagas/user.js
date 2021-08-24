@@ -24,7 +24,6 @@ function* loadMyInfo() {
 
         const result = yield call(loadMyInfoAPI);
 
-        debugger
         yield put({
             type: LOAD_MY_INFO_SUCCESS,
             data: result.data,

@@ -38,6 +38,7 @@ router.get('/', async (req, res, next) => { // GET /user
 })
 
 router.post('/login', isNotLoggedIn, (req, res, next) => {
+    //local에서 만든 done이 넘어옴
     passport.authenticate('local', (err, user, info) => {
         if (err) {
             // 서버 에러

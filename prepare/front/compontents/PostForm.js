@@ -22,7 +22,14 @@ function PostForm() {
     }, [imageInput.current])
 
     const onSubmitForm = useCallback(() => {
-        dispatch(addPost(text))
+        if (!text || !text.trim()) {
+            return alert('게시글을 작성하세요.');
+        }
+
+        return dispatch({
+            type: ADD_POST_REQUEST,
+            data: text,
+        });
     }, [text])
 
     return (

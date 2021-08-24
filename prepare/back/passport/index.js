@@ -6,11 +6,12 @@ const { User } = require('../models');
 module.exports = () => {
     // req.login 시
     passport.serializeUser((user, done) => { // 서버쪽에 [{ id: 1, cookie: 'clhxy' }]
-        done(null, user.id);
+        done(null, user.id); // session 정보에 모든 정보를 담기힘들어 id만 저장
     });
 
     passport.deserializeUser(async (id, done) => {
         try {
+            // user id로 조회시 user 정보 session 복원
             const user = await User.findOne({ where: { id } });
             done(null, user); // req.user
         } catch (error) {
