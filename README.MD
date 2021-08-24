@@ -1,9 +1,11 @@
 # REACT + NEXT
- - Framework
- ```
-    Database : MySQL
-    Front-end: Antd, React-hooks, next JS, Redux-saga
-    Back-end : node JS, node Sequelize
+
+- Framework
+
+```
+   Database : MySQL
+   Front-end: Antd, React-hooks, next JS, Redux-saga
+   Back-end : node JS, node Sequelize
 ```
 
 ## 개발 일지
@@ -47,9 +49,15 @@
 - 회원가입 후 회원가입 버튼 누를때 버그 수정
 - db로 부터 잘못된 정보 에러 반환 오류 처리 수정
 
-
 ### 6일차
- - credentials 쿠키 공유
- - 라우터 인증여부 isAutenticated 미들웨어 추가
- - 로그인 풀리는 현상 수정 
- - 전체적인 정리 (https://blog.naver.com/qhanfckwsmsd/222481257808)
+
+- credentials 쿠키 공유
+- 라우터 인증여부 isAutenticated 미들웨어 추가
+- 로그인 풀리는 현상 수정
+- 전체적인 정리 (https://blog.naver.com/qhanfckwsmsd/222481257808)
+
+### 7일차
+
+- addPost dispatch시 scucess 안되는 현상 back 소스 수정
+- 좋아요 버튼 및 좋아요 해제 버튼 라우터 , api 추가
+- 게시판 댓글 달기 라우터, api 추가
