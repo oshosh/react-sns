@@ -1,5 +1,6 @@
 //import
 const express = require('express');
+const path = require('path')
 const cors = require('cors');
 const session = require('express-session') // npm i express-session (login 전략시..)
 const cookieParser = require('cookie-parser') // >npm i cookie-parser
@@ -29,6 +30,7 @@ db.sequelize.sync().then(() => {
     console.log('db 연결 성공')
 }).catch(console.error)
 
+app.use('/images', express.static(path.join(__dirname, 'uploads'))) // '/' => localhost:3065/images
 app.use(express.json()) // json 형식으로..
 app.use(express.urlencoded({ extended: true })) // form 형식..
 

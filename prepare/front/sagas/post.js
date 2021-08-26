@@ -11,7 +11,7 @@ import {
     LOAD_POSTS_FAILURE,
     LOAD_POSTS_REQUEST,
     LOAD_POSTS_SUCCESS,
-    REMOVE_POST_FAILURE, REMOVE_POST_REQUEST, REMOVE_POST_SUCCESS, UNLIKE_POST_FAILURE, UNLIKE_POST_REQUEST, UNLIKE_POST_SUCCESS
+    REMOVE_POST_FAILURE, REMOVE_POST_REQUEST, REMOVE_POST_SUCCESS, UNLIKE_POST_FAILURE, UNLIKE_POST_REQUEST, UNLIKE_POST_SUCCESS, UPLOAD_IMAGES_FAILURE, UPLOAD_IMAGES_REQUEST, UPLOAD_IMAGES_SUCCESS
 } from '../reducers/post';
 import { ADD_POST_TO_ME, REMOVE_POST_OF_ME } from '../reducers/user';
 
@@ -36,17 +36,17 @@ function* addComment(action) {
 }
 
 function removePostAPI(data) {
-    return axios.delete(`/api/post`, data);
+    return axios.delete(`/post/${data}`);
 }
 
 function* removePost(action) {
     try {
-        // const result = yield call(addPostAPI, action.data);
-        yield delay(1000);
+        const result = yield call(removePostAPI, action.data);
         yield put({
             type: REMOVE_POST_SUCCESS,
-            data: action.data,
+            data: result.data,
         });
+
         yield put({
             type: REMOVE_POST_OF_ME,
             data: action.data
@@ -145,6 +145,26 @@ function* unlikePost(action) {
     }
 }
 
+function uploadImagesAPI(data) {
+    return axios.post('/post/images', data);
+}
+
+function* uploadImages(action) {
+    try {
+        const result = yield call(uploadImagesAPI, action.data);
+        yield put({
+            type: UPLOAD_IMAGES_SUCCESS,
+            data: result.data,
+        });
+    } catch (err) {
+        console.error(err);
+        yield put({
+            type: UPLOAD_IMAGES_FAILURE,
+            error: err.response.data,
+        });
+    }
+}
+
 
 function* watchAddPost() {
     yield takeLatest(ADD_POST_REQUEST, addPost);
@@ -166,6 +186,9 @@ function* watchLikePost() {
 function* watchUnlikePost() {
     yield takeLatest(UNLIKE_POST_REQUEST, unlikePost);
 }
+function* watchUploadImages() {
+    yield takeLatest(UPLOAD_IMAGES_REQUEST, uploadImages);
+}
 
 export default function* postSaga() {
     yield all([
@@ -175,5 +198,6 @@ export default function* postSaga() {
         fork(watchLoadPosts),
         fork(watchLikePost),
         fork(watchUnlikePost),
+        fork(watchUploadImages),
     ]);
 }

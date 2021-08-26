@@ -1,8 +1,21 @@
 const express = require('express')
+const multer = require('multer')
+const path = require('path')
+const fs = require('fs');
+
 const { Post, Image, Comment, User } = require('../models')
 const { isLoggedIn, isNotLoggedIn } = require('./middleware')
 
 const router = express.Router();
+
+try {
+    fs.accessSync('uploads')
+} catch (error) {
+    console.log('uploads 폴더가 없으므로 생성')
+    fs.mkdirSync('uploads')
+}
+
+
 router.post('/', isLoggedIn, async (req, res, next) => { // POST /post
     try {
         const post = await Post.create({
@@ -36,6 +49,28 @@ router.post('/', isLoggedIn, async (req, res, next) => { // POST /post
         next(error)
     }
 });
+
+// https://github.com/expressjs/multer
+const upload = multer({
+    storage: multer.diskStorage({
+        destination(req, file, done) {
+            done(null, 'uploads');
+        },
+        filename(req, file, done) { // osh.png
+            const ext = path.extname(file.originalname); // 확장자 추출 (png)
+            const baseName = path.basename(file.originalname, ext) // osh 추출
+
+            done(null, baseName + new Date().getTime() + ext) // osh15451231.png
+        }
+    }),
+    limits: { fileSize: 10 * 1024 * 1024 }, // 10mb
+})
+// upload.array('image') 여러장 , upload.single('image') 한장, upload.none() // 텍스트
+router.post('/images', isLoggedIn, upload.array('image'), (req, res, next) => { // POST /post/images
+    console.log(req.files);//이미지 정보
+    res.json(req.files.map((v) => v.filename));
+});
+
 
 router.post('/:postId/comment', isLoggedIn, async (req, res, next) => { // POST /post/1/comment
     try {
@@ -91,6 +126,19 @@ router.delete('/:postId/like', isLoggedIn, async (req, res, next) => { // DELETE
         next(error);
     }
 });
+
+router.delete('/:postId', isLoggedIn, async (req, res, next) => {
+    try {
+        await Post.destroy({
+            where: { id: req.params.postId },
+            UserId: req.user.id,
+        });
+        res.status(200).json({ PostId: parseInt(req.params.postId, 10) })
+    } catch (error) {
+        console.error(error)
+        next(error)
+    }
+})
 
 module.exports = router;
 //npm i sequelize sequelize-cli mysql2

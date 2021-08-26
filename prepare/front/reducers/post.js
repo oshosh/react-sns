@@ -3,6 +3,10 @@ import { produce } from 'immer'
 import shortid from 'shortid';
 import faker from 'faker'
 
+export const UPLOAD_IMAGES_REQUEST = 'UPLOAD_IMAGES_REQUEST';
+export const UPLOAD_IMAGES_SUCCESS = 'UPLOAD_IMAGES_SUCCESS';
+export const UPLOAD_IMAGES_FAILURE = 'UPLOAD_IMAGES_FAILURE';
+
 export const LIKE_POST_REQUEST = 'LIKE_POST_REQUEST';
 export const LIKE_POST_SUCCESS = 'LIKE_POST_SUCCESS';
 export const LIKE_POST_FAILURE = 'LIKE_POST_FAILURE';
@@ -93,6 +97,11 @@ export const initialState = {
     unlikePostLoading: false,
     unlikePostDone: false,
     unlikePostError: null,
+
+    // 이미지 업로드
+    uploadImagesLoading: false,
+    uploadImagesDone: false,
+    uploadImagesError: null,
 }
 const randomArr = [1, 2, 3, 4, 5, 6,]
 
@@ -159,6 +168,23 @@ const dummyComment = (data) => ({
 export default (state = initialState, action) => {
     return produce(state, (draft) => {
         switch (action.type) {
+
+            case UPLOAD_IMAGES_REQUEST:
+                draft.uploadImagesLoading = true;
+                draft.uploadImagesDone = false;
+                draft.uploadImagesError = null;
+                break;
+            case UPLOAD_IMAGES_SUCCESS: {
+                draft.imagePaths = action.data;
+                draft.uploadImagesLoading = false;
+                draft.uploadImagesDone = true;
+                break;
+            }
+            case UPLOAD_IMAGES_FAILURE:
+                draft.uploadImagesLoading = false;
+                draft.uploadImagesError = action.error;
+                break;
+
             case ADD_POST_REQUEST:
                 draft.addPostLoading = true
                 draft.addPostDone = false
@@ -216,7 +242,7 @@ export default (state = initialState, action) => {
             case REMOVE_POST_SUCCESS:
                 draft.removePostLoading = false;
                 draft.removePostDone = true;
-                draft.mainPosts = draft.mainPosts.filter((v) => v.id !== action.data);
+                draft.mainPosts = draft.mainPosts.filter((v) => v.id !== action.data.PostId);
                 break;
             case REMOVE_POST_FAILURE:
                 draft.removePostLoading = false;

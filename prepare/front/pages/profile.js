@@ -4,13 +4,25 @@ import AppLayout from '../compontents/AppLayout';
 
 import NicknameEditForm from '../compontents/NicknameEditForm';
 import FollowList from '../compontents/FollowList';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Router from 'next/router';
+import { LOAD_FOLLOWERS_REQUEST, LOAD_FOLLOWINGS_REQUEST } from '../reducers/user'
+
 
 const Profile = () => {
+    const dispatch = useDispatch()
     const { me } = useSelector((state) => state.user)
     // const followingList = [{ nickname: 'osh' }, { nickname: 'testuser' }, { nickname: 'testuser' }, { nickname: 'testuser' }]
     // const followerList = [{ nickname: 'osh' }, { nickname: 'testuser' }, { nickname: 'testuser' }, { nickname: 'testuser' }]
+    useEffect(() => {
+        dispatch({
+            type: LOAD_FOLLOWERS_REQUEST,
+        });
+        dispatch({
+            type: LOAD_FOLLOWINGS_REQUEST,
+        });
+    }, []);
+
     useEffect(() => {
         if (!(me?.id)) {
             Router.push('/')
