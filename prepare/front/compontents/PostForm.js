@@ -2,7 +2,7 @@ import { Button, Form, Input } from 'antd';
 import React, { useCallback, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import useInput from '../hooks/useInput';
-import { UPLOAD_IMAGES_REQUEST, ADD_POST_REQUEST } from '../reducers/post';
+import { UPLOAD_IMAGES_REQUEST, ADD_POST_REQUEST, REMOVE_IMAGE } from '../reducers/post';
 
 function PostForm() {
     const { imagePaths, addPostDone } = useSelector((state) => state.post);
@@ -25,12 +25,16 @@ function PostForm() {
         if (!text || !text.trim()) {
             return alert('게시글을 작성하세요.');
         }
-
+        const formData = new FormData();
+        imagePaths.forEach((p) => {
+            formData.append('image', p);
+        });
+        formData.append('content', text);
         return dispatch({
             type: ADD_POST_REQUEST,
-            data: text,
+            data: formData,
         });
-    }, [text])
+    }, [text, imagePaths])
 
     const onChangeImages = useCallback((e) => {
         console.log('images', e.target.files);
@@ -43,6 +47,13 @@ function PostForm() {
             data: imageFormData,
         });
     }, []);
+
+    const onRemoveImage = useCallback((index) => () => {
+        dispatch({
+            type: REMOVE_IMAGE,
+            data: index
+        })
+    })
 
 
     return (
@@ -65,20 +76,11 @@ function PostForm() {
                             <div key={v} style={{ display: 'inline-block' }}>
                                 <img src={`http://localhost:3065/images/${v}`} style={{ width: '200px' }} alt={v} />
                                 <div>
-                                    <Button >제거</Button>
+                                    <Button onClick={onRemoveImage(i)}> 제거</Button>
                                 </div>
                             </div>
                         )
                     })
-                    // imagePaths.map((v, i) => (
-
-                    //     <div key={v} style={{ display: 'inline-block' }}>
-                    //         <img src={`http://localhost:3065/images/${v}`} style={{ width: '200px' }} alt={v} />
-                    //         <div>
-                    //             <Button onClick={onRemoveImage(i)}>제거</Button>
-                    //         </div>
-                    //     </div>
-                    // ))
                 }
             </div>
         </Form>
