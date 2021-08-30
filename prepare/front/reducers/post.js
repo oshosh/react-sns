@@ -19,6 +19,10 @@ export const LOAD_POSTS_REQUEST = 'LOAD_POSTS_REQUEST';
 export const LOAD_POSTS_SUCCESS = 'LOAD_POSTS_SUCCESS';
 export const LOAD_POSTS_FAILURE = 'LOAD_POSTS_FAILURE';
 
+export const LOAD_POST_REQUEST = 'LOAD_POST_REQUEST';
+export const LOAD_POST_SUCCESS = 'LOAD_POST_SUCCESS';
+export const LOAD_POST_FAILURE = 'LOAD_POST_FAILURE';
+
 export const ADD_POST_REQUEST = 'ADD_POST_REQUEST';
 export const ADD_POST_SUCCESS = 'ADD_POST_SUCCESS';
 export const ADD_POST_FAILURE = 'ADD_POST_FAILURE';
@@ -75,6 +79,7 @@ export const initialState = {
     //         content: '얼른 사고싶어요~',
     //     }]
     // }],
+    singlePost: null,
     mainPosts: [],
     imagePaths: [],
 
@@ -113,6 +118,11 @@ export const initialState = {
     retweetLoading: false,
     retweetDone: false,
     retweetError: null,
+
+    // 단일 게시물 가져오기
+    loadPostLoading: false,
+    loadPostDone: false,
+    loadPostError: null,
 }
 const randomArr = [1, 2, 3, 4, 5, 6,]
 
@@ -326,6 +336,22 @@ export default (state = initialState, action) => {
             case RETWEET_FAILURE:
                 draft.retweetLoading = false;
                 draft.retweetError = action.error;
+                break;
+
+            // 단일게시물 가져오기
+            case LOAD_POST_REQUEST:
+                draft.loadPostLoading = true;
+                draft.loadPostDone = false;
+                draft.loadPostError = null;
+                break;
+            case LOAD_POST_SUCCESS:
+                draft.loadPostLoading = false;
+                draft.loadPostDone = true;
+                draft.singlePost = action.data;
+                break;
+            case LOAD_POST_FAILURE:
+                draft.loadPostLoading = false;
+                draft.loadPostError = action.error;
                 break;
             default:
                 break

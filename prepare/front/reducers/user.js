@@ -12,6 +12,10 @@ export const LOAD_MY_INFO_REQUEST = 'LOAD_MY_INFO_REQUEST';
 export const LOAD_MY_INFO_SUCCESS = 'LOAD_MY_INFO_SUCCESS';
 export const LOAD_MY_INFO_FAILURE = 'LOAD_MY_INFO_FAILURE';
 
+export const LOAD_USER_REQUEST = 'LOAD_USER_REQUEST';
+export const LOAD_USER_SUCCESS = 'LOAD_USER_SUCCESS';
+export const LOAD_USER_FAILURE = 'LOAD_USER_FAILURE';
+
 export const LOG_IN_REQUEST = 'LOG_IN_REQUEST';
 export const LOG_IN_SUCCESS = 'LOG_IN_SUCCESS';
 export const LOG_IN_FAILURE = 'LOG_IN_FAILURE';
@@ -45,9 +49,13 @@ export const REMOVE_POST_OF_ME = 'REMOVE_POST_OF_ME';
 
 //초기값
 export const initialState = {
-    loadMyInfoLoading: false, // 유저 정보 가져오기 시도중
+    loadMyInfoLoading: false, // 유저 정보(나의정보) 가져오기 시도중 
     loadMyInfoDone: false,
     loadMyInfoError: null,
+
+    loadUserLoading: false, // 유저 정보(다른사람 정보) 가져오기 시도중 
+    loadUserDone: false,
+    loadUserError: null,
 
     followLoading: false, // 팔로우 시도중
     followDone: false,
@@ -88,6 +96,8 @@ export const initialState = {
 
     signUpData: {},
     loginData: {},
+
+    userInfo: null
 }
 
 
@@ -152,6 +162,24 @@ export default (state = initialState, action) => {
                 draft.loadFollowersLoading = false;
                 draft.loadFollowersError = action.error;
                 break;
+
+
+
+            //ssr 적용 이후 부터 다른사람 정보를 가져오도록 
+            case LOAD_USER_REQUEST:
+                draft.loadUserLoading = true;
+                draft.loadUserError = null;
+                draft.loadUserDone = false;
+                break;
+            case LOAD_USER_SUCCESS:
+                draft.loadUserLoading = false;
+                draft.userInfo = action.data;
+                draft.loadUserDone = true;
+                break;
+            case LOAD_USER_FAILURE:
+                draft.loadUserLoading = false;
+                draft.loadUserError = action.error;
+                break;
             case LOAD_MY_INFO_REQUEST:
                 draft.loadMyInfoLoading = true;
                 draft.loadMyInfoError = null;
@@ -166,6 +194,8 @@ export default (state = initialState, action) => {
                 draft.loadMyInfoLoading = false;
                 draft.loadMyInfoError = action.error;
                 break;
+            //ssr 적용 이후 부터 다른사람 정보를 가져오도록 
+
 
             // 회원 가입 후 done 초기화
             case 'SIGN_UP_DONE_SUCCESS_INIT':

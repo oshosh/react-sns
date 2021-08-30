@@ -1,10 +1,14 @@
+import axios from 'axios';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { END } from 'redux-saga';
 import AppLayout from '../compontents/AppLayout';
 import PostCard from '../compontents/PostCard';
 import PostForm from '../compontents/PostForm';
 import { LOAD_POSTS_REQUEST } from '../reducers/post';
 import { LOAD_MY_INFO_REQUEST } from '../reducers/user';
+import wrapper from '../store/configureStore';
+
 
 const HOME = () => {
     const dispatch = useDispatch()
@@ -17,14 +21,15 @@ const HOME = () => {
         }
     }, [retweetError])
 
-    useEffect(() => {
-        dispatch({
-            type: LOAD_MY_INFO_REQUEST
-        })
-        dispatch({
-            type: LOAD_POSTS_REQUEST
-        })
-    }, [])
+    //SSR로 인한 사용 안함
+    // useEffect(() => {
+    //     dispatch({
+    //         type: LOAD_MY_INFO_REQUEST
+    //     })
+    //     dispatch({
+    //         type: LOAD_POSTS_REQUEST
+    //     })
+    // }, [])
 
     useEffect(() => {
         function onScroll() {
@@ -79,5 +84,29 @@ const HOME = () => {
         </AppLayout>
     );
 }
+
+// ssr
+// 순전히 front 서버에서 가져오는 정보
+// front에서 back으로 가져와 success을 시키기때문에 credential, access allow control 문제 생김 (쿠키)
+export const getServerSideProps = wrapper.getServerSideProps(async (context) => {
+    const cookie = context.req ? context.req.headers.cookie : '';
+    axios.defaults.headers.Cookie = '';
+
+    // 쿠키를 지웠다가 넣어줘야한다.
+    // 서버쿠키정보를 계속 들고오는 경우가 있어 다른사람이 타 유저 아이디로 접속되는 현상이 있다.
+    if (context.req && cookie) {
+        axios.defaults.headers.Cookie = cookie;
+    }
+
+    context.store.dispatch({
+        type: LOAD_MY_INFO_REQUEST
+    });
+    context.store.dispatch({
+        type: LOAD_POSTS_REQUEST
+    });
+    context.store.dispatch(END)
+    await context.store.sagaTask.toPromise();
+});
+
 
 export default HOME;
