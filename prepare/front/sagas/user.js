@@ -15,27 +15,6 @@ import {
 } from '../reducers/user';
 
 
-function loadUserAPI(data) {
-    return axios.get(`/user/${data}`);
-}
-
-function* loadUser(action) {
-    try {
-        const result = yield call(loadUserAPI, action.data);
-
-        yield put({
-            type: LOAD_USER_SUCCESS,
-            data: result.data,
-        });
-    } catch (err) {
-        console.error(err);
-        yield put({
-            type: LOAD_USER_FAILURE,
-            error: err.response.data,
-        });
-    }
-}
-
 function loadMyInfoAPI() {
     return axios.get('/user');
 }
@@ -53,6 +32,27 @@ function* loadMyInfo() {
         console.error(err);
         yield put({
             type: LOAD_MY_INFO_FAILURE,
+            error: err.response.data,
+        });
+    }
+}
+
+function loadUserAPI(data) {
+    return axios.get(`/user/${data}`);
+}
+
+function* loadUser(action) {
+    try {
+        const result = yield call(loadUserAPI, action.data);
+
+        yield put({
+            type: LOAD_USER_SUCCESS,
+            data: result.data,
+        });
+    } catch (err) {
+        console.error(err);
+        yield put({
+            type: LOAD_USER_FAILURE,
             error: err.response.data,
         });
     }
@@ -259,6 +259,7 @@ function* watchSignUp() {
 function* watchLoadMyInfo() {
     yield takeLatest(LOAD_MY_INFO_REQUEST, loadMyInfo);
 }
+
 function* watchLoadUser() {
     yield takeLatest(LOAD_USER_REQUEST, loadUser);
 }

@@ -15,8 +15,7 @@ import { END } from 'redux-saga';
 const Profile = () => {
     const dispatch = useDispatch()
     const { me } = useSelector((state) => state.user)
-    // const followingList = [{ nickname: 'osh' }, { nickname: 'testuser' }, { nickname: 'testuser' }, { nickname: 'testuser' }]
-    // const followerList = [{ nickname: 'osh' }, { nickname: 'testuser' }, { nickname: 'testuser' }, { nickname: 'testuser' }]
+
     useEffect(() => {
         if (!(me?.id)) {
             Router.push('/')
