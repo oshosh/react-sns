@@ -9,7 +9,11 @@ import CommentForm from './CommentForm';
 import PostCardContent from './PostCardContent';
 import { LIKE_POST_REQUEST, REMOVE_POST_REQUEST, UNLIKE_POST_REQUEST, RETWEET_REQUEST } from '../reducers/post';
 import FollowButton from './FollowButton';
+import Link from 'next/link';
+import moment from 'moment';
 
+
+moment.locale('ko')
 function PostCard({ post }) {
     const dispatch = useDispatch()
     const { removePostLoading } = useSelector((state) => state.post);
@@ -57,7 +61,32 @@ function PostCard({ post }) {
             data: post.id,
         })
     }, [id])
+
+    const getdateFormated = (date) => {
+        const otherDates = moment(date).fromNow();
+
+        let callback = function (action) {
+
+            if (action === 'lastDay') {
+                return moment().startOf('day').fromNow()
+            } else {
+                return '[' + otherDates + ']';
+            }
+        }
+        return moment(date).calendar(null, {
+            sameDay: '[Today]',
+            nextDay: '[Tomorrow]',
+            nextWeek: 'dddd',
+            lastDay: '[Yesterday]',
+            lastWeek: '[Last] dddd',
+            sameElse: 'DD/MM/YYYY'
+        });
+    }
+
     const liked = post.Likers.find((v) => v.id === id)
+    const YYYYMMDD = moment(post.createdAt).format('YYYYMMDD')
+    const asdfasdf = getdateFormated(post.createdAt)
+
     return (
         <div style={{ marginBottom: '20px' }} >
             <Card
@@ -89,22 +118,38 @@ function PostCard({ post }) {
             >
                 {post.RetweetId && post.Retweet
                     ? (
+                        // 리트윗 게시물
                         <Card
                             cover={post.Retweet.Images[0] && <PostImages images={post.Retweet.Images} />}
                         >
+                            <div style={{ float: 'right' }}>{moment(YYYYMMDD, 'YYYYMMDD').fromNow()} {asdfasdf}</div>
                             <Card.Meta
-                                avatar={<Avatar>{post.Retweet.User.nickname[0]}</Avatar>}
+                                style={{ clear: 'both' }}
+                                avatar={(
+                                    <Link href={`user/${post.Retweet.User.id}`}>
+                                        <a><Avatar>{post.Retweet.User.nickname[0]}</Avatar></a>
+                                    </Link>
+                                )}
                                 title={post.Retweet.User.nickname}
                                 description={<PostCardContent postData={post.Retweet.content} />}
                             />
                         </Card>
                     )
                     : (
-                        <Card.Meta
-                            avatar={<Avatar>{post.User.nickname[0]}</Avatar>}
-                            title={post.User.nickname}
-                            description={<PostCardContent postData={post.content} />}
-                        />
+                        // 일반게시물
+                        <>
+                            <div style={{ float: 'right' }}>{moment(YYYYMMDD, "YYYYMMDD").fromNow()} {asdfasdf}</div>
+                            <Card.Meta
+                                style={{ clear: 'both' }}
+                                avatar={(
+                                    <Link href={`user/${post.User.id}`}>
+                                        <a><Avatar>{post.User.nickname[0]}</Avatar></a>
+                                    </Link>
+                                )}
+                                title={post.User.nickname}
+                                description={<PostCardContent postData={post.content} />}
+                            />
+                        </>
                     )}
             </Card>
             {commentFormOpened &&
@@ -118,7 +163,11 @@ function PostCard({ post }) {
                             <li>
                                 <Comment
                                     author={item.User.nickname}
-                                    avatar={<Avatar>{item.User.nickname[0]}</Avatar>}
+                                    avatar={(
+                                        <Link href={`user/${item.User.id}`}>
+                                            <Avatar>{item.User.nickname[0]}</Avatar>
+                                        </Link>
+                                    )}
                                     content={item.content}
                                 />
                             </li>

@@ -12,6 +12,7 @@ const morgan = require('morgan');
 const userRouter = require('./routes/user');
 const postRouter = require('./routes/post');
 const postsRouter = require('./routes/posts');
+const hashtagRouter = require('./routes/hashtag');
 
 // db models
 const db = require('./models')
@@ -50,7 +51,6 @@ app.use(passport.session());
 
 passportConfig();
 
-
 app.get('/', (req, res) => {
     res.send('hello express')
 });
@@ -59,6 +59,7 @@ app.get('/', (req, res) => {
 app.use('/user', userRouter);
 app.use('/post', postRouter);
 app.use('/posts', postsRouter);
+app.use('/hashtag', hashtagRouter);
 
 // custom 에러
 app.use((err, req, res, next) => {

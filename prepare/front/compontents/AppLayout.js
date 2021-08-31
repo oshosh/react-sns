@@ -1,4 +1,5 @@
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
+import Router from 'next/router'
 import Prototype from 'prop-types'
 import Link from 'next/link'
 import { Input, Menu, Row, Col } from 'antd'
@@ -12,10 +13,18 @@ import UserProfile from '../compontents/UserProfile';
 import LoginForm from '../compontents/LoginForm';
 
 import { useSelector } from 'react-redux'
+import useInput from '../hooks/useInput';
 
 
 const AppLayout = ({ children }) => {
+    const [searchInput, onchangeSearchInput] = useInput('')
     const { me } = useSelector(state => state.user);
+
+    const onSearch = useCallback((e) => {
+        // 프로그래밍적 일반적인 주소 이동은 Router
+        // Link은 해당 링크로 가기 앱 동작
+        Router.push(`/hashtag/${searchInput}`)
+    }, [searchInput])
     return (
         <>
             <Global />
@@ -27,7 +36,12 @@ const AppLayout = ({ children }) => {
                     <Link href='/profile'><a>프로필</a></Link>
                 </Menu.Item>
                 <Menu.Item key='3'>
-                    <SearchInput enterButton />
+                    <SearchInput
+                        enterButton
+                        value={searchInput}
+                        onChange={onchangeSearchInput}
+                        onSearch={onSearch}
+                    />
                 </Menu.Item>
                 <Menu.Item key='4'>
                     {/* <Link href='/signup'><a>회원가입</a></Link> */}
