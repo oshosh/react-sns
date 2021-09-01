@@ -1,26 +1,26 @@
-import 'antd/dist/antd.css'
-import Prototype from 'prop-types'
-import Head from 'next/head'
+import React from 'react';
+import Prototype from 'prop-types';
+import Head from 'next/head';
+import 'antd/dist/antd.css';
 
 import wrapper from '../store/configureStore';
 
-const App = ({ Component }) => {
-
+const App = ({ Component, pageProps }) => {
+    debugger
     return (
         <>
             <Head>
                 <meta charSet='utf-8'></meta>
                 <title>NodeBird</title>
             </Head>
-            {/* <div>공통메뉴</div> */}
-            <Component />
+            <Component {...pageProps} />
         </>
 
     );
 }
 
-export default wrapper.withRedux(App);
-
 App.Prototype = {
     Component: Prototype.elementType.isRequired,
 }
+
+export default wrapper.withRedux(App);

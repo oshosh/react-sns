@@ -9,7 +9,6 @@ import { LOAD_POSTS_REQUEST } from '../reducers/post';
 import { LOAD_MY_INFO_REQUEST } from '../reducers/user';
 import wrapper from '../store/configureStore';
 
-
 const HOME = () => {
     const dispatch = useDispatch()
     const { me } = useSelector((state) => state.user);
