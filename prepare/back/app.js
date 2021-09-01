@@ -7,6 +7,8 @@ const cookieParser = require('cookie-parser') // >npm i cookie-parser
 const passport = require('passport');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
+const hpp = require('hpp');
+const helmet = require('helmet');
 
 // 라우터
 const userRouter = require('./routes/user');
@@ -35,9 +37,15 @@ app.use('/images', express.static(path.join(__dirname, 'uploads'))) // '/' => lo
 app.use(express.json()) // json 형식으로..
 app.use(express.urlencoded({ extended: true })) // form 형식..
 
-app.use(morgan('dev'))
+if (process.env.NODE_ENV === 'production') {
+    app.use(morgan('combined'));
+    app.use(hpp());
+    app.use(helmet());
+} else {
+    app.use(morgan('dev'))
+}
 app.use(cors({
-    origin: 'http://localhost:3060',
+    origin: ['http://localhost:3060', 'oshbird.com'],
     credentials: true, // access-control-allow-credentials
 }))
 app.use(cookieParser(process.env.COOKIE_SECRET))
