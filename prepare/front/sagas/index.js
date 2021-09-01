@@ -1,5 +1,6 @@
 import { all, fork } from "@redux-saga/core/effects";
 import axios from "axios";
+import { backUrl } from "../config/config";
 // fork - 비동기로 함수 실행 (non-block)
 // all - 배열 내 action 전부 실행
 // take - action이 실행 될 떄 까지 대기
@@ -10,7 +11,7 @@ import axios from "axios";
 import postSaga from "./post";
 import userSaga from "./user";
 
-axios.defaults.baseURL = 'http://localhost:3065/'
+axios.defaults.baseURL = backUrl //'http://localhost:3065/'
 axios.defaults.withCredentials = true;
 
 export default function* rootSaga() {
