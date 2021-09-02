@@ -44,9 +44,10 @@ if (process.env.NODE_ENV === 'production') {
 } else {
     app.use(morgan('dev'))
 }
+// access-control-allow-credentials
 app.use(cors({
     origin: ['http://localhost:3060', 'oshbird.com', '13.209.84.39'],
-    credentials: true, // access-control-allow-credentials
+    credentials: true,
 }))
 app.use(cookieParser(process.env.COOKIE_SECRET))
 app.use(session({
