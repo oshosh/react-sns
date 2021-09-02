@@ -6,7 +6,6 @@ import 'antd/dist/antd.css';
 import wrapper from '../store/configureStore';
 
 const App = ({ Component, pageProps }) => {
-    debugger
     return (
         <>
             <Head>
