@@ -72,6 +72,7 @@
  - SSR 라이브러리 사용시 메소드 네이밍 문제로 인한 next 6 버젼 교체
  - CSS SSR 추가 (_document.js)
  - SSR 적용 후 프로필에서 팔로우리스트/언팔로우리스트에서 라우터 파라메터로 이상한 값 들어가는 내용 back 라우터 메소드 위치 수정
+ - next SSR debugger package.json + cross_env 내용 추가 (윈도우는 cross_env 필요..)
 
 ### 10일차
  - 다이나믹 라우팅, SWR get, moment 라이브러리 등 사용
