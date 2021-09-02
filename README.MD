@@ -4,8 +4,8 @@
 
 ```
    Database : MySQL
-   Front-end: Antd, React-hooks, next JS, Redux-saga
-   Back-end : node Express, node Sequelize
+   Front-end: Antd / React-hooks(Redux-saga, SWR), next JS(SSR)
+   Back-end : Node Express, Node Sequelize
 ```
 
 ## 개발 일지
