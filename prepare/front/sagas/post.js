@@ -69,18 +69,12 @@ function* removePost(action) {
     }
 }
 function loadHashtagPostsAPI(data, lastId) {
-    console.log('data, lastId')
-    console.log(data)
-    console.log(lastId)
     return axios.get(`/hashtag/${encodeURIComponent(data)}?lastId=${lastId || 0}`);
 }
 
 function* loadHashtagPosts(action) {
     try {
-        debugger
-        console.log('loadHashtagPostsAPI result~~~~~~~~~~~')
         const result = yield call(loadHashtagPostsAPI, action.data, action.lastId);
-        console.log('loadHashtagPostsAPI result')
         yield put({
             type: LOAD_HASHTAG_POSTS_SUCCESS,
             data: result.data,
